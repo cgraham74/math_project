@@ -1,10 +1,10 @@
 import React from 'react';
+import Answers from './Score';
 
-export default Main () {
+export default function Main() {
     return (
     <>
-
-    
+    <Answers/>
     </>
     );
 }
