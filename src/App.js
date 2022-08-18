@@ -2,7 +2,7 @@
 import Header from './components/Header';
 import Main from './components/Main';
 import Footer from './components/Footer';
-import Answers, { RenderOperands, RenderScore } from './components/BusinessLogic';
+import Answers, { RenderOperands, RenderProblem, RenderScore } from './components/BusinessLogic';
 import './App.css';
 
 function App() {
@@ -11,6 +11,7 @@ function App() {
      <Header />
      <RenderOperands/>
      <RenderScore />
+     <RenderProblem operator = "+" />
      <Answers />
      <Footer />
     </div>
