@@ -149,6 +149,7 @@ answers = shuffleArray([randomNumber(101), randomNumber(101), randomNumber(101),
     return (
       
         <section id="answers" className="show-hide">
+            <RenderOperands />
             <ul>
                 <li>{answers[0]}</li>
                 <li>{answers[1]}</li>
