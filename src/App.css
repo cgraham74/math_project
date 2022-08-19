@@ -13,7 +13,7 @@ footer {
 }
 
 h1 {
-  font-family: 'Bangers', cursive;
+  font-family: "Bangers", cursive;
   font-size: 5rem;
 }
 
@@ -55,7 +55,7 @@ button {
   display: block;
   margin: 40px auto;
   padding: 8px 12px;
-  background-color: #ABD587;
+  background-color: #abd587;
   text-transform: uppercase;
   border: 0px;
   border-radius: 4px;
@@ -67,6 +67,6 @@ button {
 }
 
 .box {
-  margin-left: 27px;
-  margin-right: 20px;
+  margin-left: 30px;
+  margin-right: 10px;
 }

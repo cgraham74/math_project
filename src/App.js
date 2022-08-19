@@ -1,19 +1,18 @@
-
-import Header from './components/Header';
-import Main from './components/Main';
-import Footer from './components/Footer';
-import Answers, { RenderOperands, RenderProblem, RenderScore } from './components/BusinessLogic';
-import './App.css';
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+// import Main from "./components/Main";
+import "./App.css";
+import { RenderCheckbox } from "./components/RenderCheckbox";
+import {Button} from './components/Main';
 
 function App() {
   return (
     <div className="App">
-     <Header />
-     <RenderOperands/>
-     <RenderScore />
-     <RenderProblem operator = "+" />
-     <Answers />
-     <Footer />
+      <Header />
+      {/* <Main /> */}
+      <RenderCheckbox />
+      <Button />
+      <Footer />
     </div>
   );
 }
