@@ -1,19 +1,22 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-// import Main from "./components/Main";
+import { RenderCheckbox, Begin, StartOver } from "./components/Game"
+import Game from "./components/Game";
 import "./App.css";
-import { RenderCheckbox } from "./components/RenderCheckbox";
-import {Button} from './components/Main';
 
 function App() {
   return (
     <div className="App">
       <Header />
-      {/* <Main /> */}
       <RenderCheckbox />
-      <Button />
+      <div id="game" className="show-hide">
+      <Game />
+      </div>
+      <Begin />
+      <StartOver />
       <Footer />
     </div>
+
   );
 }
 
