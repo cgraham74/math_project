@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { RenderCheckbox, Begin, StartOver } from "./components/Game"
+import { RenderCheckbox, Start, StartOver } from "./components/Game"
 import Game from "./components/Game";
 import "./App.css";
 
@@ -12,7 +12,7 @@ function App() {
       <div id="game" className="show-hide">
       <Game />
       </div>
-      <Begin />
+      <Start />
       <StartOver />
       <Footer />
     </div>

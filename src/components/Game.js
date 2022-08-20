@@ -1,11 +1,8 @@
-import { render } from "@testing-library/react";
 import { useState } from "react";
 import React from "react";
 
 let operators = [null, null, null, null];
 let correctAnswer = 0;
-// let score = 0;
-// let problemCounter = 0;
 
 const shuffleArray = (arr) => {
   return arr.sort(function (a, b) {
@@ -18,14 +15,8 @@ const randomNumber = (max) => {
 };
 
 export function Problem(props) {
-
-  const operator = operators[randomNumber(operators.length)]
-
-  
-  console.log("Pre-exection operator " + operator)
-
+  const operator = props.operators[randomNumber(props.operators.length)];
   let result;
-
 
   if (props.secondNum === 0 && operator === "/") {
     props.secondNum += 1;
@@ -47,99 +38,93 @@ export function Problem(props) {
     default:
       result = props.firstNum * props.secondNum;
   }
+  correctAnswer = result;
 
-   correctAnswer = result;
-
-   console.log("First number at Problem execute " + props.firstNum)
-   console.log("Second number at Problem execute " + props.secondNum)
-   
-return (
-  <>
-  <RenderProblem firstNum ={props.firstNum} operator={operator} secondNum = {props.secondNum}/>
-  <RenderAnswers answers={shuffleArray([randomNumber(101), randomNumber(101), randomNumber(101), correctAnswer])}/> 
-  </>
-)
-
-
+  return (
+    <>
+      <RenderProblem
+        firstNum={props.firstNum}
+        operator={operator}
+        secondNum={props.secondNum}
+      />
+      <RenderAnswers
+        answers={shuffleArray([
+          randomNumber(101),
+          randomNumber(101),
+          randomNumber(101),
+          correctAnswer,
+        ])}
+      />
+    </>
+  );
 }
 
 export function RenderProblem(props) {
-
-
-
   return (
     <div className="expression">
       <p>
         {props.firstNum} {props.operator} {props.secondNum}
       </p>
     </div>
-    
   );
 }
 
 export function RenderAnswers(props) {
-
   let [score, setScore] = useState(0);
   let [problemCounter, setProblemCounter] = useState(0);
 
   const answers = props.answers.map((answer) => {
-    return <li onClick={(e)=> {
-      setProblemCounter(problemCounter+1)
-      let currentAnswer = e.target.innerText 
+    return (
+      <li
+        onClick={(e) => {
+          setProblemCounter(problemCounter + 1);
+          let currentAnswer = parseInt(e.target.innerText);
 
-      console.log("This is the clicked answer " + currentAnswer)
-      console.log("This is the correct answer " + correctAnswer)
-      console.log("Operators after problem execute " + operators)
-      // console.log("First num at onClick " + firstNum)
-      // console.log("Second num at onClick " + secondNum)
+          console.log("CurrentAnswers: " + currentAnswer);
+          console.log("CorrectAnswer: " + correctAnswer);
 
-
-
-      if(currentAnswer == correctAnswer) {setScore(score+1)}
-    }
-      }>{answer}</li>
-  
-  })
-
-  
+          if (currentAnswer === correctAnswer) setScore(score + 1);
+        }}
+      >
+        {answer}
+      </li>
+    );
+  });
   return (
-  <>
-  <Score problemCounter={problemCounter} score={score} />
-    <section id="answers">
-      <ul>
-        {answers}
-      </ul>
-    </section>
+    <>
+      <Score problemCounter={problemCounter} score={score} />
+      <section id="answers">
+        <ul>{answers}</ul>
+      </section>
     </>
   );
 }
 
 export function Score(props) {
-
-
-    return (
-        <p>
-        Problem: <span className="currentProblem">{props.problemCounter}</span>/10 | Score: <span className="currentScore">{props.score}</span>
-        </p>
-
-    )
+  return (
+    <p>
+      Problem: <span className="currentProblem">{props.problemCounter}</span>/10
+      | Score: <span className="currentScore">{props.score}</span>
+    </p>
+  );
 }
 
 export default function Game() {
-
-let [firstNum, setFirstNum] = useState(randomNumber(10));
-let [secondNum, setSecondNum] = useState(randomNumber(10));
+  let [firstNum, setFirstNum] = useState(randomNumber(10));
+  let [secondNum, setSecondNum] = useState(randomNumber(10));
 
   return (
     <>
-       <Problem firstNum={firstNum}  operator={operators} secondNum={secondNum} />
+      <Problem
+        firstNum={firstNum}
+        operators={operators}
+        secondNum={secondNum}
+      />
     </>
   );
 }
 
-
 export function displayGame() {
-  
   document.getElementById("checkboxHolder").style.display = "none";
   document.getElementById("start").style.display = "none";
   document.getElementById("game").classList.remove("show-hide");
@@ -147,40 +132,43 @@ export function displayGame() {
 
   return (
     <>
-   
+      <Problem
+        firstNum={randomNumber(10)}
+        operators={operators}
+        secondNum={randomNumber(10)}
+      />
     </>
-  )
+  );
 }
 
-export function Begin() {
-  
-  
-    //TODO Needs a state - to display "Start or Start Over"
-    //Needs to reset the main window
-    //Needs to 
-    return (
-        <button id="start" className="start" onClick={displayGame}>Start Game</button>
-    )
-
-}
-
-function reset() {
-  // score = 0;
-  // problemCounter = 0;
-
-  document.getElementById("checkboxHolder").style.display = "";
-  document.getElementById("start").style.display = "";
-  document.getElementById("game").classList.add("show-hide");
-  document.getElementById("startOver").classList.add("show-hide");
+export function Start() {
+  //TODO Needs a state - to display "Start or Start Over"
+  //Needs to reset the main window
+  //Needs to
+  return (
+    <button id="start" className="start" onClick={displayGame}>
+      Start Game
+    </button>
+  );
 }
 
 export function StartOver() {
+  function reset() {
+    // score = 0;
+    // problemCounter = 0;
+
+    document.getElementById("checkboxHolder").style.display = "";
+    document.getElementById("start").style.display = "";
+    document.getElementById("game").classList.add("show-hide");
+    document.getElementById("startOver").classList.add("show-hide");
+  }
+
   return (
-        <button id="startOver" className="start show-hide" onClick={reset}>Start Over</button>
-    )
+    <button id="startOver" className="start show-hide" onClick={reset}>
+      Start Over
+    </button>
+  );
 }
-
-
 
 export function RenderCheckbox() {
   const [addition, setAddition] = useState(false);
