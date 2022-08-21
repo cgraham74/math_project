@@ -15,6 +15,12 @@ function shuffleArray(arr) {
   });
 }
 
+/**
+ * Random number generator that takes a single paramter and returns a random whole
+ * number up to but excluding the number given
+ * @param {*} max  The number given is not included - so be sure to add 1 to the max value you want
+ * @returns A randomly generated whole number
+ */
 const randomNumber = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
@@ -106,6 +112,7 @@ const randomNumber = (max) => {
 // }
 
 export default function Game() {
+  const [buttonText, setButtonText] = useState(true);
   const [firstNum, setFirstNum] = useState(randomNumber(10));
   const [secondNum, setSecondNum] = useState(randomNumber(10));
   const [correctAnswer, setCorrectAnswer] = useState(firstNum * secondNum);
@@ -121,21 +128,27 @@ export default function Game() {
     setCorrectAnswer(firstNewNum * secondNewNum);
   }
 
+  /**
+   * Creates an unorderd list and renders it to the dom
+   * and then renders the elements to the dom
+   * @param {*} props can pass in an array of answers and sets a correct answer through the function call <RenderedAnswers/>
+   * @returns An unorderd list of dom elements
+   */
   function RenderAnswers(props) {
-    const answers = props.answers.map((answer) => {
+    const answers = props.answers.map((answer, index) => {
       return (
         <>
           <li
+            key={index}
             onClick={(e) => {
               setProblemCounter(problemCounter + 1);
               if (problemCounter < 9) {
-                 let currentAnswer = parseInt(e.target.innerText);
+                let currentAnswer = parseInt(e.target.innerText);
                 if (currentAnswer === correctAnswer) setScore(score + 1);
                 updateExpression();
               } else {
-                setHide(prevHide => !hide);
+                setHide((prevHide) => !hide);
               }
-             
             }}
           >
             {answer}
@@ -145,31 +158,30 @@ export default function Game() {
     });
     return (
       <>
-        <div class="a" id="answers">
-          {!hide && <ul>{answers}</ul>}
-        </div>
+        <div id="answers">{!hide && <ul>{answers}</ul>}</div>
       </>
     );
   }
 
   function StartOver() {
+    function handleClick() {
+      setHide((prevHide) => !prevHide);
+      setScore(0);
+      setProblemCounter(0);
+      setButtonText(prevText => !prevText);
+      
+    }
 
-  function reset() {
-    setHide(prevHide => !prevHide);
-    setScore(0);
-    setProblemCounter(0);
+    return (
+      <button id="startOver" className="start" onClick={handleClick}>
+        {buttonText ? "Start Over": "Start"}
+      </button>
+    );
   }
 
   return (
-    <button id="startOver" className="start" onClick={reset}>
-      Start Over
-    </button>
-  );
-}
-
-  return (
     <>
-      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={hide}/>
+      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={hide} />
       <RenderScore problemCounter={problemCounter} score={score} />
       <RenderAnswers
         correctAnswer={correctAnswer}
@@ -184,8 +196,6 @@ export default function Game() {
     </>
   );
 }
-
-
 
 // export function RenderCheckbox() {
 //   const [addition, setAddition] = useState(false);
