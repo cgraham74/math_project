@@ -152,6 +152,21 @@ export default function Game() {
     );
   }
 
+  function StartOver() {
+
+  function reset() {
+    setHide(prevHide => !prevHide);
+    setScore(0);
+    setProblemCounter(0);
+  }
+
+  return (
+    <button id="startOver" className="start" onClick={reset}>
+      Start Over
+    </button>
+  );
+}
+
   return (
     <>
       <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={hide}/>
@@ -170,20 +185,7 @@ export default function Game() {
   );
 }
 
-export function StartOver() {
-  function reset() {
-    document.getElementById("checkboxHolder").style.display = "";
-    document.getElementById("start").style.display = "";
-    // document.getElementById("game").classList.add("show-hide");
-    // document.getElementById("startOver").classList.add("show-hide");
-  }
 
-  return (
-    <button id="startOver" className="start" onClick={reset}>
-      Start Over
-    </button>
-  );
-}
 
 // export function RenderCheckbox() {
 //   const [addition, setAddition] = useState(false);
