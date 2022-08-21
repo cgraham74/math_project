@@ -3,7 +3,6 @@ import React from "react";
 import RenderProblem from "./RenderProblem";
 import RenderScore from "./RenderScore";
 
-// let correctAnswer = 0;
 let operators = [];
 /**
  * Utility function to shuffle the items in an array
@@ -25,6 +24,11 @@ const randomNumber = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
+
+/**
+ * 
+ * @returns Reponsible for controlling the entire app - stores state, data, and direction.
+ */
 export default function Game() {
   const [buttonText, setButtonText] = useState(true);
   const [firstNum, setFirstNum] = useState(0);
@@ -34,7 +38,6 @@ export default function Game() {
   const [problemCounter, setProblemCounter] = useState(0);
   const [startHide, setStartHide] = useState(true);
   const [operator, setOperator] = useState("*");
-  //const [operators, setOperators] = useState(operators);
 
   function getCorrectAnswer(oper, firstNum, secondNum) {
     let result;
@@ -79,7 +82,6 @@ export default function Game() {
     setFirstNum(firstNewNum);
     setSecondNum(secondNewNum);
     let answer = getCorrectAnswer(newOperator, firstNewNum, secondNewNum);
-    // operator = operators[getRandomNumber(operators.length)];
     setCorrectAnswer(answer);
   }
 
@@ -120,6 +122,11 @@ export default function Game() {
     );
   }
 
+
+  /**
+   * Responsible for click events on the start button and resets the score and changes the button text
+   * @returns a rendered button with text based on the state of the game 
+   */
   function StartOver() {
     function handleClick() {
       if (buttonText === true) {
@@ -174,10 +181,8 @@ export default function Game() {
     </>
   );
 }
-// operator = operators[getRandomNumber(operators.length)];
-
 /**
- *
+ * Component that renders checkboxes to the dom and stores operators selected by the user
  * @returns Renders checkboxes to the screen and updates operators with the values contained within the checkboxes
  */
 export function RenderCheckbox(props) {
@@ -193,7 +198,7 @@ export function RenderCheckbox(props) {
   };
 
   /**
-   * Creating checkbox elements
+   * Creating checkbox elements and rendering to the dom
    */
   return (
     <div id="checkboxHolder" className="operands">
