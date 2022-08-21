@@ -1,12 +1,15 @@
-import React from 'react';
+import React from "react";
 
 export default function RenderProblem(props) {
-    return (
-      <div className="expression">
-        <p>
-          {/* {props.firstNum} {props.operators} {props.secondNum} */}
-          {props.firstNum} * {props.secondNum}
-        </p>
-      </div>
-    );
-  }
+  return (
+    <>
+      {!props.hide && (
+        <div className="expression" id="problem">
+          <p>
+            {props.firstNum} * {props.secondNum}
+          </p>
+        </div>
+      )}
+    </>
+  );
+}

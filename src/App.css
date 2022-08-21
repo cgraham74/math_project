@@ -17,7 +17,7 @@ h1 {
   font-size: 5rem;
 }
 
-#problem .expression {
+#problem, .expression {
   font-size: 48px;
   border: 1px solid #eeeeee;
   padding: 10px;
@@ -67,6 +67,6 @@ button {
   margin-right: 10px;
 }
 
-/* .show-hide {
+.show-hide {
   display: none;
-} */
+}

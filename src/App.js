@@ -7,7 +7,7 @@ function App() {
   return (
     <div className="App">
       <Header />
-      <div id="game" className="show-hide">
+      <div id="game" >
       <Game />
       </div>
       <Footer />

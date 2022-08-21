@@ -83,7 +83,7 @@ const randomNumber = (max) => {
 //           onClick={(e) => {
 //             setProblemCounter(problemCounter + 1);
 //             let currentAnswer = parseInt(e.target.innerText);
-            
+
 //             console.log("CurrentAnswers: " + currentAnswer);
 //             console.log("CorrectAnswer: " + props.correctAnswer);
 
@@ -111,26 +111,31 @@ export default function Game() {
   const [correctAnswer, setCorrectAnswer] = useState(firstNum * secondNum);
   const [score, setScore] = useState(0);
   const [problemCounter, setProblemCounter] = useState(0);
+  const [hide, setHide] = useState(false);
 
-  function updatefExpression() {
+  function updateExpression() {
     let firstNewNum = randomNumber(10);
     let secondNewNum = randomNumber(10);
     setFirstNum(firstNewNum);
     setSecondNum(secondNewNum);
-    setCorrectAnswer(firstNewNum * secondNewNum)
+    setCorrectAnswer(firstNewNum * secondNewNum);
   }
 
   function RenderAnswers(props) {
-    
     const answers = props.answers.map((answer) => {
       return (
         <>
           <li
             onClick={(e) => {
               setProblemCounter(problemCounter + 1);
-              let currentAnswer = parseInt(e.target.innerText);
-              if (currentAnswer === correctAnswer) setScore(score + 1);
-              updatefExpression();
+              if (problemCounter < 9) {
+                 let currentAnswer = parseInt(e.target.innerText);
+                if (currentAnswer === correctAnswer) setScore(score + 1);
+                updateExpression();
+              } else {
+                setHide(prevHide => !hide);
+              }
+             
             }}
           >
             {answer}
@@ -140,21 +145,19 @@ export default function Game() {
     });
     return (
       <>
-        <RenderScore problemCounter={problemCounter} score={score} />
-        <section id="answers">
-          <ul>{answers}</ul>
-        </section>
+        <div class="a" id="answers">
+          {!hide && <ul>{answers}</ul>}
+        </div>
       </>
     );
   }
 
   return (
     <>
-      <RenderProblem
-        firstNum={firstNum}
-        secondNum={secondNum}
-      />
-      <RenderAnswers correctAnswer={correctAnswer}
+      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={hide}/>
+      <RenderScore problemCounter={problemCounter} score={score} />
+      <RenderAnswers
+        correctAnswer={correctAnswer}
         answers={shuffleArray([
           randomNumber(100),
           randomNumber(100),
@@ -171,12 +174,12 @@ export function StartOver() {
   function reset() {
     document.getElementById("checkboxHolder").style.display = "";
     document.getElementById("start").style.display = "";
-    document.getElementById("game").classList.add("show-hide");
-    document.getElementById("startOver").classList.add("show-hide");
+    // document.getElementById("game").classList.add("show-hide");
+    // document.getElementById("startOver").classList.add("show-hide");
   }
 
   return (
-    <button id="startOver" className="start show-hide" onClick={reset}>
+    <button id="startOver" className="start" onClick={reset}>
       Start Over
     </button>
   );
@@ -295,7 +298,6 @@ export function StartOver() {
 //     </div>
 //   );
 //}
-
 
 // export function Start() {
 //   return (
