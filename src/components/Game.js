@@ -4,7 +4,7 @@ import RenderProblem from "./RenderProblem";
 import RenderScore from "./RenderScore";
 
 let correctAnswer = 0;
-
+let operators = [];
 /**
  * Utility function to shuffle the items in an array
  * @param {object} arr
@@ -36,24 +36,24 @@ const randomNumber = (max) => {
 //   // const secondNum = randomNumber(10);
 //   console.log("PROBLEM FUNCTION" + props.firstNum);
 //   console.log("PROBLEM FUNCTION" + props.secondNum);
-//   // if (secondNum === 0 && props.operator === "/") {
-//   //   secondNum += 1;
-//   // }
+  // if (secondNum === 0 && props.operator === "/") {
+  //   secondNum += 1;
+  // }
 
-//   // switch ("*") {
-//   //   case "+":
-//   //     result = firstNum + secondNum;
-//   //     break;
-//   //   case "-":
-//   //     result = firstNum - secondNum;
-//   //     break;
-//   //   case "*":
-//   //     result = firstNum * secondNum;
-//   //     break;
-//   //   case "/":
-//   //     result = firstNum / secondNum;
-//   // //     break;
-//   //   default:
+  // switch ("*") {
+  //   case "+":
+  //     result = firstNum + secondNum;
+  //     break;
+  //   case "-":
+  //     result = firstNum - secondNum;
+  //     break;
+  //   case "*":
+  //     result = firstNum * secondNum;
+  //     break;
+  //   case "/":
+  //     result = firstNum / secondNum;
+  //     break;
+  //   default:
 //   correctAnswer = props.firstNum * props.secondNum;
 //   console.log("CORRECT ANSWER" + correctAnswer);
 //   //}
@@ -78,54 +78,63 @@ const randomNumber = (max) => {
 //   );
 // }
 
-// export function RenderAnswers(props) {
-//   let [score, setScore] = useState(0);
-//   let [problemCounter, setProblemCounter] = useState(0);
-
-//   const answers = props.answers.map((answer) => {
-//     return (
-//       <>
-//         <li
-//           onClick={(e) => {
-//             setProblemCounter(problemCounter + 1);
-//             let currentAnswer = parseInt(e.target.innerText);
-
-//             console.log("CurrentAnswers: " + currentAnswer);
-//             console.log("CorrectAnswer: " + props.correctAnswer);
-
-//             if (currentAnswer === props.correctAnswer) setScore(score + 1);
-//           }}
-//         >
-//           {answer}
-//         </li>
-//       </>
-//     );
-//   });
-//   return (
-//     <>
-//       <RenderScore problemCounter={problemCounter} score={score} />
-//       <section id="answers">
-//         <ul>{answers}</ul>
-//       </section>
-//     </>
-//   );
-// }
-
 export default function Game() {
   const [buttonText, setButtonText] = useState(true);
-  const [firstNum, setFirstNum] = useState(randomNumber(10));
-  const [secondNum, setSecondNum] = useState(randomNumber(10));
-  const [correctAnswer, setCorrectAnswer] = useState(firstNum * secondNum);
+  const [firstNum, setFirstNum] = useState(0);
+  const [secondNum, setSecondNum] = useState(0);
+  const [correctAnswer, setCorrectAnswer] = useState(0);
   const [score, setScore] = useState(0);
   const [problemCounter, setProblemCounter] = useState(0);
-  const [hide, setHide] = useState(false);
+  const [startHide, setStartHide] = useState(true);
+  const [operator, setOperator] = useState('*')
+  //const [operators, setOperators] = useState(operators);
+
+  function getCorrectAnswer(oper, firstNum, secondNum) {
+    let result;
+
+    switch (oper) {
+    case "+":
+      result = firstNum + secondNum;
+      break;
+    case "-":
+      result = firstNum - secondNum;
+      break;
+    case "*":
+      result = firstNum * secondNum;
+      break;
+    case "/":
+      result = firstNum / secondNum;
+      break;
+      default:
+      result = firstNum * secondNum
+    }
+    return result;
+  }
+
+  function getOperator() {
+    let oper;
+    if(operators.length === 0) {
+      oper = "*";
+    } else {
+      oper = operators[randomNumber(operators.length)];
+    }
+    return oper;
+  }
 
   function updateExpression() {
+    let newOperator = getOperator();
+    setOperator(newOperator); 
     let firstNewNum = randomNumber(10);
     let secondNewNum = randomNumber(10);
+    if (secondNewNum === 0 && newOperator === "/") {
+      secondNewNum += 1;
+    }
     setFirstNum(firstNewNum);
     setSecondNum(secondNewNum);
-    setCorrectAnswer(firstNewNum * secondNewNum);
+    let answer = getCorrectAnswer(newOperator, firstNewNum, secondNewNum);
+     // operator = operators[getRandomNumber(operators.length)];
+    setCorrectAnswer(answer);
+
   }
 
   /**
@@ -147,7 +156,7 @@ export default function Game() {
                 if (currentAnswer === correctAnswer) setScore(score + 1);
                 updateExpression();
               } else {
-                setHide((prevHide) => !hide);
+                setStartHide((prevHide) => !prevHide);
               }
             }}
           >
@@ -158,14 +167,14 @@ export default function Game() {
     });
     return (
       <>
-        <div id="answers">{!hide && <ul>{answers}</ul>}</div>
+        <div id="answers">{!startHide && <ul>{answers}</ul>}</div>
       </>
     );
   }
 
   function StartOver() {
     function handleClick() {
-      setHide((prevHide) => !prevHide);
+      setStartHide((prevHide) => !prevHide);
       setScore(0);
       setProblemCounter(0);
       setButtonText(prevText => !prevText);
@@ -174,15 +183,16 @@ export default function Game() {
 
     return (
       <button id="startOver" className="start" onClick={handleClick}>
-        {buttonText ? "Start Over": "Start"}
+        {buttonText ? "Start": "Start Over"}
       </button>
     );
   }
 
   return (
     <>
-      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={hide} />
-      <RenderScore problemCounter={problemCounter} score={score} />
+      <RenderCheckbox />
+      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={startHide} operator={operator} />
+      <RenderScore problemCounter={problemCounter} score={score} hide={startHide}/>
       <RenderAnswers
         correctAnswer={correctAnswer}
         answers={shuffleArray([
@@ -196,133 +206,74 @@ export default function Game() {
     </>
   );
 }
+  // operator = operators[getRandomNumber(operators.length)];
 
-// export function RenderCheckbox() {
-//   const [addition, setAddition] = useState(false);
-//   const [subtraction, setSubtraction] = useState(false);
-//   const [multiplication, setMultiplication] = useState(false);
-//   const [division, setDivision] = useState(false);
 
-//   /**
-//    * Adding operands to the array based on which check boxes are used
-//    * In the event a user changes their mind and unchecks a box - the value is removed from the operators array
-//    *
-//    */
+/**
+ * 
+ * @returns Renders checkboxes to the screen and updates operators with the values contained within the checkboxes
+ */  
+export function RenderCheckbox() {
 
-//   const setAdd = () => {
-//     setAddition(!addition);
-//     if (!addition) {
-//       operators[0] = "+";
-//     }
+    const handleChange = (event)=>{
+      if (event.target.checked){
+        operators.push(event.target.value)
+        console.log(operators)
+      } else {
+        let index = operators.indexOf(event.target.value)
+        operators.splice(index)
+        console.log(operators)
+      }
+    }
 
-//     if (addition) {
-//       operators[0] = null;
-//     }
+  /**
+   * Creating checkbox elements
+   */
+  return (
+    <div id="checkboxHolder" className="operands">
+      <form>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            className="box"
+            name="Addition"
+            value="+"
+          />
+          Addition
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            className="box"
+            name="Subtraction"
+            value="-"
+          />
+          Subtraction
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            className="box"
+            name="Multiplication"
+            value="*"
+          />
+          Multiplication
+        </label>
+        <label>
+          <input
+            type="checkbox"
+            onChange={handleChange}
+            className="box"
+            name="Division"
+            value="/"
+          />
+          Division
+        </label>
+      </form>
+    </div>
+  );
+}
 
-//   };
-
-//   const setSub = () => {
-//     setSubtraction(!subtraction);
-//     if (!subtraction) {
-//       operators[1] = "-";
-//     }
-
-//     if (subtraction) {
-//       operators[1] = null;
-//     }
-
-//   };
-
-//   const setMult = () => {
-//     setMultiplication(!multiplication);
-//     if (!multiplication) {
-//       operators[2] = "*";
-//     }
-
-//     if (multiplication) {
-//       operators[2] = null;
-//     }
-
-//   };
-//   const setDiv = () => {
-//     setDivision(!division);
-//     if (!division) {
-//       operators[3] = "/";
-//     }
-
-//     if (division) {
-//       operators[3] = null;
-//     }
-
-//   };
-
-//   /**
-//    * Creating checkbox elements
-//    */
-//   return (
-//     <div id="checkboxHolder" className="operands">
-//       <form>
-//         <label>
-//           <input
-//             type="checkbox"
-//             checked={addition}
-//             onChange={setAdd}
-//             className="box"
-//             name="Addition"
-//             value="+"
-//           />
-//           Addition
-//         </label>
-//         <label>
-//           <input
-//             type="checkbox"
-//             checked={subtraction}
-//             onChange={setSub}
-//             className="box"
-//             name="Subtraction"
-//             value="-"
-//           />
-//           Subtraction
-//         </label>
-//         <label>
-//           <input
-//             type="checkbox"
-//             checked={multiplication}
-//             onChange={setMult}
-//             className="box"
-//             name="Multiplication"
-//             value="*"
-//           />
-//           Multiplication
-//         </label>
-//         <label>
-//           <input
-//             type="checkbox"
-//             checked={division}
-//             onChange={setDiv}
-//             className="box"
-//             name="Division"
-//             value="/"
-//           />
-//           Division
-//         </label>
-//       </form>
-//     </div>
-//   );
-//}
-
-// export function Start() {
-//   return (
-//     <button id="start" className="start" onClick={displayGame}>
-//       Start Game
-//     </button>
-//   );
-// }
-
-// export function displayGame() {
-//   document.getElementById("checkboxHolder").style.display = "none";
-//   document.getElementById("start").style.display = "none";
-//   document.getElementById("game").classList.remove("show-hide");
-//   document.getElementById("startOver").classList.remove("show-hide");
-//   return <></>;
-// }

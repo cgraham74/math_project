@@ -6,7 +6,7 @@ export default function RenderProblem(props) {
       {!props.hide && (
         <div className="expression" id="problem">
           <p>
-            {props.firstNum} * {props.secondNum}
+            {props.firstNum} {props.operator} {props.secondNum}
           </p>
         </div>
       )}

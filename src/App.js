@@ -1,6 +1,6 @@
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import Game from "./components/Game";
+import Game, { RenderCheckbox } from "./components/Game";
 import "./App.css";
 
 function App() {
