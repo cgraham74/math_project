@@ -3,7 +3,7 @@ import React from "react";
 import RenderProblem from "./RenderProblem";
 import RenderScore from "./RenderScore";
 
-let correctAnswer = 0;
+// let correctAnswer = 0;
 let operators = [];
 /**
  * Utility function to shuffle the items in an array
@@ -24,59 +24,6 @@ function shuffleArray(arr) {
 const randomNumber = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
-
-// export function Problem(props) {
-//   // const randomNumber = (max) => {
-//   //   return Math.floor(Math.random() * Math.floor(max));
-//   // };
-
-//   let result;
-
-//   // const firstNum = randomNumber(10);
-//   // const secondNum = randomNumber(10);
-//   console.log("PROBLEM FUNCTION" + props.firstNum);
-//   console.log("PROBLEM FUNCTION" + props.secondNum);
-  // if (secondNum === 0 && props.operator === "/") {
-  //   secondNum += 1;
-  // }
-
-  // switch ("*") {
-  //   case "+":
-  //     result = firstNum + secondNum;
-  //     break;
-  //   case "-":
-  //     result = firstNum - secondNum;
-  //     break;
-  //   case "*":
-  //     result = firstNum * secondNum;
-  //     break;
-  //   case "/":
-  //     result = firstNum / secondNum;
-  //     break;
-  //   default:
-//   correctAnswer = props.firstNum * props.secondNum;
-//   console.log("CORRECT ANSWER" + correctAnswer);
-//   //}
-//   // correctAnswer = result;
-
-//   return (
-//     <>
-//       <RenderProblem
-//         firstNum={props.firstNum}
-//         // operators={props.operator}
-//         secondNum={props.secondNum}
-//       />
-//       {/* <RenderAnswers
-//         answers={shuffleArray([
-//           randomNumber(100),
-//           randomNumber(100),
-//           randomNumber(100),
-//           correctAnswer,
-//         ])}
-//       /> */}
-//     </>
-//   );
-// }
 
 export default function Game() {
   const [buttonText, setButtonText] = useState(true);
@@ -156,6 +103,8 @@ export default function Game() {
                 if (currentAnswer === correctAnswer) setScore(score + 1);
                 updateExpression();
               } else {
+                operators.splice(0, operators.length);
+                setButtonText(prevText => !prevText);
                 setStartHide((prevHide) => !prevHide);
               }
             }}
@@ -174,6 +123,11 @@ export default function Game() {
 
   function StartOver() {
     function handleClick() {
+      if(buttonText === true) {
+        updateExpression();
+      } else {
+        operators.splice(0, operators.length);
+      }
       setStartHide((prevHide) => !prevHide);
       setScore(0);
       setProblemCounter(0);
@@ -190,7 +144,7 @@ export default function Game() {
 
   return (
     <>
-      <RenderCheckbox />
+      <RenderCheckbox hide={!startHide}/>
       <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={startHide} operator={operator} />
       <RenderScore problemCounter={problemCounter} score={score} hide={startHide}/>
       <RenderAnswers
@@ -213,7 +167,7 @@ export default function Game() {
  * 
  * @returns Renders checkboxes to the screen and updates operators with the values contained within the checkboxes
  */  
-export function RenderCheckbox() {
+export function RenderCheckbox(props) {
 
     const handleChange = (event)=>{
       if (event.target.checked){
@@ -231,6 +185,7 @@ export function RenderCheckbox() {
    */
   return (
     <div id="checkboxHolder" className="operands">
+      {!props.hide &&
       <form>
         <label>
           <input
@@ -272,7 +227,7 @@ export function RenderCheckbox() {
           />
           Division
         </label>
-      </form>
+      </form>}
     </div>
   );
 }
