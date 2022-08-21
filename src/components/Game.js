@@ -33,34 +33,34 @@ export default function Game() {
   const [score, setScore] = useState(0);
   const [problemCounter, setProblemCounter] = useState(0);
   const [startHide, setStartHide] = useState(true);
-  const [operator, setOperator] = useState('*')
+  const [operator, setOperator] = useState("*");
   //const [operators, setOperators] = useState(operators);
 
   function getCorrectAnswer(oper, firstNum, secondNum) {
     let result;
 
     switch (oper) {
-    case "+":
-      result = firstNum + secondNum;
-      break;
-    case "-":
-      result = firstNum - secondNum;
-      break;
-    case "*":
-      result = firstNum * secondNum;
-      break;
-    case "/":
-      result = firstNum / secondNum;
-      break;
+      case "+":
+        result = firstNum + secondNum;
+        break;
+      case "-":
+        result = firstNum - secondNum;
+        break;
+      case "*":
+        result = firstNum * secondNum;
+        break;
+      case "/":
+        result = firstNum / secondNum;
+        break;
       default:
-      result = firstNum * secondNum
+        result = firstNum * secondNum;
     }
     return result;
   }
 
   function getOperator() {
     let oper;
-    if(operators.length === 0) {
+    if (operators.length === 0) {
       oper = "*";
     } else {
       oper = operators[randomNumber(operators.length)];
@@ -70,7 +70,7 @@ export default function Game() {
 
   function updateExpression() {
     let newOperator = getOperator();
-    setOperator(newOperator); 
+    setOperator(newOperator);
     let firstNewNum = randomNumber(10);
     let secondNewNum = randomNumber(10);
     if (secondNewNum === 0 && newOperator === "/") {
@@ -79,9 +79,8 @@ export default function Game() {
     setFirstNum(firstNewNum);
     setSecondNum(secondNewNum);
     let answer = getCorrectAnswer(newOperator, firstNewNum, secondNewNum);
-     // operator = operators[getRandomNumber(operators.length)];
+    // operator = operators[getRandomNumber(operators.length)];
     setCorrectAnswer(answer);
-
   }
 
   /**
@@ -104,7 +103,7 @@ export default function Game() {
                 updateExpression();
               } else {
                 operators.splice(0, operators.length);
-                setButtonText(prevText => !prevText);
+                setButtonText((prevText) => !prevText);
                 setStartHide((prevHide) => !prevHide);
               }
             }}
@@ -123,7 +122,7 @@ export default function Game() {
 
   function StartOver() {
     function handleClick() {
-      if(buttonText === true) {
+      if (buttonText === true) {
         updateExpression();
       } else {
         operators.splice(0, operators.length);
@@ -131,22 +130,37 @@ export default function Game() {
       setStartHide((prevHide) => !prevHide);
       setScore(0);
       setProblemCounter(0);
-      setButtonText(prevText => !prevText);
-      
+      setButtonText((prevText) => !prevText);
     }
 
     return (
       <button id="startOver" className="start" onClick={handleClick}>
-        {buttonText ? "Start": "Start Over"}
+        {buttonText ? "Start" : "Start Over"}
       </button>
     );
   }
 
   return (
     <>
-      <RenderCheckbox hide={!startHide}/>
-      <RenderProblem firstNum={firstNum} secondNum={secondNum} hide={startHide} operator={operator} />
-      <RenderScore problemCounter={problemCounter} score={score} hide={startHide}/>
+      <RenderCheckbox hide={!startHide} />
+      <RenderProblem
+        firstNum={firstNum}
+        secondNum={secondNum}
+        hide={startHide}
+        operator={operator}
+      />
+      <RenderScore
+        problemCounter={problemCounter}
+        score={score}
+        hide={startHide}
+      />
+      {problemCounter === 10 && (
+        <RenderScore
+          problemCounter={problemCounter}
+          score={score}
+          hide={false}
+        />
+      )}
       <RenderAnswers
         correctAnswer={correctAnswer}
         answers={shuffleArray([
@@ -160,75 +174,73 @@ export default function Game() {
     </>
   );
 }
-  // operator = operators[getRandomNumber(operators.length)];
-
+// operator = operators[getRandomNumber(operators.length)];
 
 /**
- * 
+ *
  * @returns Renders checkboxes to the screen and updates operators with the values contained within the checkboxes
- */  
+ */
 export function RenderCheckbox(props) {
-
-    const handleChange = (event)=>{
-      if (event.target.checked){
-        operators.push(event.target.value)
-        console.log(operators)
-      } else {
-        let index = operators.indexOf(event.target.value)
-        operators.splice(index)
-        console.log(operators)
-      }
+  const handleChange = (event) => {
+    if (event.target.checked) {
+      operators.push(event.target.value);
+      console.log(operators);
+    } else {
+      let index = operators.indexOf(event.target.value);
+      operators.splice(index);
+      console.log(operators);
     }
+  };
 
   /**
    * Creating checkbox elements
    */
   return (
     <div id="checkboxHolder" className="operands">
-      {!props.hide &&
-      <form>
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleChange}
-            className="box"
-            name="Addition"
-            value="+"
-          />
-          Addition
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleChange}
-            className="box"
-            name="Subtraction"
-            value="-"
-          />
-          Subtraction
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleChange}
-            className="box"
-            name="Multiplication"
-            value="*"
-          />
-          Multiplication
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            onChange={handleChange}
-            className="box"
-            name="Division"
-            value="/"
-          />
-          Division
-        </label>
-      </form>}
+      {!props.hide && (
+        <form>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              className="box"
+              name="Addition"
+              value="+"
+            />
+            Addition
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              className="box"
+              name="Subtraction"
+              value="-"
+            />
+            Subtraction
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              className="box"
+              name="Multiplication"
+              value="*"
+            />
+            Multiplication
+          </label>
+          <label>
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              className="box"
+              name="Division"
+              value="/"
+            />
+            Division
+          </label>
+        </form>
+      )}
     </div>
   );
 }
-
