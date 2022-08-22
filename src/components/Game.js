@@ -24,9 +24,8 @@ const randomNumber = (max) => {
   return Math.floor(Math.random() * Math.floor(max));
 };
 
-
 /**
- * 
+ *
  * @returns Reponsible for controlling the entire app - stores state, data, and direction.
  */
 export default function Game() {
@@ -99,9 +98,9 @@ export default function Game() {
             key={index}
             onClick={(e) => {
               setProblemCounter(problemCounter + 1);
+              let currentAnswer = parseInt(e.target.innerText);
+              if (currentAnswer === correctAnswer) setScore(score + 1);
               if (problemCounter < 9) {
-                let currentAnswer = parseInt(e.target.innerText);
-                if (currentAnswer === correctAnswer) setScore(score + 1);
                 updateExpression();
               } else {
                 operators.splice(0, operators.length);
@@ -122,10 +121,9 @@ export default function Game() {
     );
   }
 
-
   /**
    * Responsible for click events on the start button and resets the score and changes the button text
-   * @returns a rendered button with text based on the state of the game 
+   * @returns a rendered button with text based on the state of the game
    */
   function StartOver() {
     function handleClick() {
