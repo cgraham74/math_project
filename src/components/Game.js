@@ -191,11 +191,9 @@ export function RenderCheckbox(props) {
   const handleChange = (event) => {
     if (event.target.checked) {
       operators.push(event.target.value);
-      console.log(operators);
     } else {
       let index = operators.indexOf(event.target.value);
       operators.splice(index);
-      console.log(operators);
     }
   };
   const checks = [
