@@ -2,6 +2,7 @@ import { useState } from "react";
 import React from "react";
 import RenderProblem from "./RenderProblem";
 import RenderScore from "./RenderScore";
+import Confetti from 'react-confetti';
 
 let operators = [];
 /**
@@ -37,50 +38,48 @@ export default function Game() {
   const [problemCounter, setProblemCounter] = useState(0);
   const [startHide, setStartHide] = useState(true);
   const [operator, setOperator] = useState("*");
+ 
 
   function getCorrectAnswer(oper, firstNum, secondNum) {
-    let result;
-
     switch (oper) {
       case "+":
-        result = firstNum + secondNum;
-        break;
+        return (firstNum + secondNum);
       case "-":
-        result = firstNum - secondNum;
-        break;
+        return firstNum - secondNum;
       case "*":
-        result = firstNum * secondNum;
-        break;
+        return firstNum * secondNum;
       case "/":
-        result = firstNum / secondNum;
-        break;
+        return firstNum / secondNum;
       default:
-        result = firstNum * secondNum;
+        return firstNum * secondNum;
     }
-    return result;
   }
 
-  function getOperator() {
-    let oper;
-    if (operators.length === 0) {
-      oper = "*";
-    } else {
-      oper = operators[randomNumber(operators.length)];
-    }
-    return oper;
-  }
+  /**
+   * 
+   * @returns An operator or * if no operator is selected
+   */
+function getRandomOperator(){
+  let randomOperator = operators[randomNumber(operators.length)];
+  return randomOperator ? randomOperator : "*";
+}
 
+/**
+ * 
+ */
   function updateExpression() {
-    let newOperator = getOperator();
+    const newOperator = getRandomOperator();
     setOperator(newOperator);
-    let firstNewNum = randomNumber(10);
+    const firstNewNum = randomNumber(10);
     let secondNewNum = randomNumber(10);
+
     if (secondNewNum === 0 && newOperator === "/") {
       secondNewNum += 1;
     }
+
     setFirstNum(firstNewNum);
     setSecondNum(secondNewNum);
-    let answer = getCorrectAnswer(newOperator, firstNewNum, secondNewNum);
+    const answer = getCorrectAnswer(newOperator, firstNewNum, secondNewNum);
     setCorrectAnswer(answer);
   }
 
@@ -93,8 +92,7 @@ export default function Game() {
   function RenderAnswers(props) {
     const answers = props.answers.map((answer, index) => {
       return (
-        <>
-          <li
+          <li className="answers"
             key={index}
             onClick={(e) => {
               setProblemCounter(problemCounter + 1);
@@ -110,8 +108,7 @@ export default function Game() {
             }}
           >
             {answer}
-          </li>
-        </>
+          </li> 
       );
     });
     return (
@@ -147,6 +144,7 @@ export default function Game() {
 
   return (
     <>
+    <div id="problem-answer">
       <RenderCheckbox hide={!startHide} />
       <RenderProblem
         firstNum={firstNum}
@@ -159,13 +157,17 @@ export default function Game() {
         score={score}
         hide={startHide}
       />
+      {score === 10  ? <Confetti/> :
+      <></>}
       {problemCounter === 10 && (
         <RenderScore
           problemCounter={problemCounter}
           score={score}
           hide={false}
         />
+        
       )}
+      
       <RenderAnswers
         correctAnswer={correctAnswer}
         answers={shuffleArray([
@@ -175,10 +177,12 @@ export default function Game() {
           correctAnswer,
         ])}
       />
+     </div> 
       <StartOver />
     </>
   );
 }
+
 /**
  * Component that renders checkboxes to the dom and stores operators selected by the user
  * @returns Renders checkboxes to the screen and updates operators with the values contained within the checkboxes
@@ -194,56 +198,48 @@ export function RenderCheckbox(props) {
       console.log(operators);
     }
   };
-
-  /**
-   * Creating checkbox elements and rendering to the dom
-   */
+  const checks = [
+    {
+    "name": "Addition",
+    "value":"+"
+  },
+  {
+    "name": "Subtraction",
+    "value":"-"
+  },
+  {
+    "name": "Multiplication",
+    "value":"*"
+  },
+  {
+    "name": "Division",
+    "value":"/"
+  },
+]
+  let selection = checks.map((item,id)=>{
+    return (
+      
+          <label key={id}>
+            <input
+              type="checkbox"
+              onChange={handleChange}
+              className="box"
+              name={item.name}
+              value={item.value}
+               />
+            {item.name}
+          </label>
+      )}  
+    )
   return (
-    <div id="checkboxHolder" className="operands">
+    <div id="checkboxholder" className="operands">
       {!props.hide && (
-        <form>
-          <label>
-            <input
-              type="checkbox"
-              onChange={handleChange}
-              className="box"
-              name="Addition"
-              value="+"
-            />
-            Addition
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              onChange={handleChange}
-              className="box"
-              name="Subtraction"
-              value="-"
-            />
-            Subtraction
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              onChange={handleChange}
-              className="box"
-              name="Multiplication"
-              value="*"
-            />
-            Multiplication
-          </label>
-          <label>
-            <input
-              type="checkbox"
-              onChange={handleChange}
-              className="box"
-              name="Division"
-              value="/"
-            />
-            Division
-          </label>
-        </form>
-      )}
+    <form>
+      <ul id="checks">
+      {selection}
+      </ul>
+    </form>
+    )}
     </div>
-  );
+  )
 }
