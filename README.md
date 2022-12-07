@@ -5,4 +5,4 @@ The optional project challenge: To further refactor the project to include addit
 
 One step further: I also refactored the win scenario to display animated confetti when user gets a 10/10 score.
 
-This application can be seen @ christina-graham.com/projects/mathpractice
+This application can be seen @ https://christina-graham.com/projects/mathpractice
