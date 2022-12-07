@@ -49,7 +49,7 @@ export default function Game() {
       case "*":
         return firstNum * secondNum;
       case "/":
-        return firstNum / secondNum;
+        return Number((firstNum / secondNum).toFixed(2));
       default:
         return firstNum * secondNum;
     }
@@ -96,7 +96,7 @@ function getRandomOperator(){
             key={index}
             onClick={(e) => {
               setProblemCounter(problemCounter + 1);
-              let currentAnswer = parseInt(e.target.innerText);
+              let currentAnswer = parseFloat(e.target.innerText);
               if (currentAnswer === correctAnswer) setScore(score + 1);
               if (problemCounter < 9) {
                 updateExpression();
